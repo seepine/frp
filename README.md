@@ -13,7 +13,8 @@ services:
   frps:
     image: seepine/frps:v0.44.0
     ports:
-      - 7000:7000
+      # 暴露服务端绑定端口
+      - 6666:6666
       # 暴露客户端需要的端口
       - 9999:9999
     environment:
@@ -34,11 +35,11 @@ services:
       SERVER_ADDR: 192.168.100.100
       SERVER_PORT: 6666
       TOKEN: yourtoken
-      # 通过CLIENTS配置代理
+      # 通过CLIENTS配置代理，name为必须配置项
       CLIENTS: '{"name":"ssh","type":"tcp","local_ip":"127.0.0.1","local_port":9999,"remote_port":9999}'
 ```
 
-最终会形成一下配置
+最终会生成以下配置
 
 ```ini
 [common]
@@ -70,4 +71,6 @@ services:
 
 ## 三、更多
 
-也可以通过修改 `/hoome/frp/frps.ini` 和  `/hoome/frp/frpc.ini` 实现需要的功能，用法和官方一致
+也可以手动配置 `frps.ini` 和  `frpc.ini` 实现需要的功能，用法和官方一致
+
+然后修改`ENTRYPOINT ["/usr/bin/frps","-c","frps.ini"]`即可
