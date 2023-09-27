@@ -11,7 +11,7 @@
 version: '3.7'
 services:
   frps:
-    image: seepine/frps:v0.44.0
+    image: seepine/frps
     ports:
       # 暴露服务端绑定端口
       - 6666:6666
@@ -30,7 +30,7 @@ services:
 version: '3.7'
 services:
   frpc:
-    image: seepine/frpc:v0.44.0
+    image: seepine/frpc
     environment:
       SERVER_ADDR: 192.168.100.100
       SERVER_PORT: 6666
@@ -60,7 +60,7 @@ remote_port = 9999
 version: '3.7'
 services:
   frpc:
-    image: seepine/frpc:v0.44.0
+    image: seepine/frpc
     environment:
       SERVER_ADDR: 192.168.100.100
       SERVER_PORT: 6666
