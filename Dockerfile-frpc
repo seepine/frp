@@ -1,11 +1,11 @@
-FROM fatedier/frpc:v0.44.0
+FROM fatedier/frpc:v0.51.3
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-&& apk add jq \
-&& apk add bash \
-&& echo "Asia/Shanghai" > /etc/timezone \
-&& apk del tzdata
+RUN apk add --no-cache tzdata \
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && apk del tzdata \
+    && apk add --no-cache jq \
+    && apk add --no-cache bash
 
 
 WORKDIR /home/frp

@@ -1,0 +1,67 @@
+name: Release Docker Images
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: seepine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.6.0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker BuildX
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      - name: Get Meta
+        run: |
+          echo REPO_VERSION=$(echo ${{ github.ref }} | awk -F"/" '{print $3}' | awk -F"v" '{print $2}') >> $GITHUB_ENV
+
+      - name: Build and push frps
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile-frps
+          platforms: |
+            linux/amd64
+            linux/arm64
+            linux/386
+            linux/arm/v6
+            linux/arm/v7
+            linux/ppc64le
+            linux/s390x
+          push: true
+          tags: |
+            ${{ env.DOCKER_USERNAME }}/frps:latest
+            ${{ env.DOCKER_USERNAME }}/frps:${{ env.REPO_VERSION }}
+
+      - name: Build and push frps
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile-frpc
+          platforms: |
+            linux/amd64
+            linux/arm64
+            linux/386
+            linux/arm/v6
+            linux/arm/v7
+            linux/ppc64le
+            linux/s390x
+          push: true
+          tags: |
+            ${{ env.DOCKER_USERNAME }}/frpc:latest
+            ${{ env.DOCKER_USERNAME }}/frpc:${{ env.REPO_VERSION }}
