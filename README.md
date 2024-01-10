@@ -5,6 +5,7 @@
 仓库地址：[https://github.com/seepine/frp](https://github.com/seepine/frp)
 
 ## 一、基本用法
+
 ### 1.服务端
 
 ```yml
@@ -34,28 +35,17 @@ services:
     environment:
       SERVER_ADDR: 192.168.100.100
       SERVER_PORT: 6666
+      # 当需要代理http时需要配置此变量
+      # VHOST_HTTP_PORT: 7777
       TOKEN: yourtoken
       # 通过CLIENTS配置代理，name为必须配置项
-      CLIENTS: '{"name":"ssh","type":"tcp","local_ip":"127.0.0.1","local_port":9999,"remote_port":9999}'
+      CLIENTS: '{"name":"myServer","type":"tcp","local_ip":"127.0.0.1","local_port":9999,"remote_port":9999}'
 ```
 
-最终会生成以下配置
 
-```ini
-[common]
-server_addr = 192.168.100.100
-server_port = 6666
-token = yourtoken
+## 二、进阶用法
 
-[ssh]
-type = tcp
-local_ip = 127.0.0.1
-local_port = 9999
-remote_port = 9999
-```
-
-## 二、多配置
-
+### 1.多配置
 ```yml
 version: '3.7'
 services:
@@ -66,8 +56,28 @@ services:
       SERVER_PORT: 6666
       TOKEN: yourtoken
       # 支持json数组
-      CLIENTS: '[{"name":"ssh","type":"tcp","local_ip":"127.0.0.1","local_port":9999,"remote_port":9999}]'
+      CLIENTS: |
+        [
+          {
+            "name":"myServer",
+            "type":"tcp",
+            "local_ip":"127.0.0.1",
+            "local_port":9999,
+            "remote_port":9999
+          },
+          {
+            "name":"demoWeb",
+            "type":"http",
+            "local_ip":"127.0.0.1",
+            "local_port":3000,
+            "custom_domains":"demo.example.com"
+          },
+        ]
 ```
+
+### 2.更多配置写法
+
+[https://gofrp.org/zh-cn/docs/examples/](https://gofrp.org/zh-cn/docs/examples/)
 
 ## 三、更多
 

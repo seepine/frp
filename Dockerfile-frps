@@ -1,4 +1,4 @@
-FROM fatedier/frps:v0.51.3
+FROM fatedier/frps:v0.53.2
 
 RUN apk add --no-cache tzdata \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
